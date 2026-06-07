@@ -78,7 +78,7 @@
 
   .q-title{font-size:14.5px;color:var(--ink);margin:2px 0 8px;line-height:1.4;}
   .q-sub{font-size:13px;color:var(--accent);margin-bottom:14px;}
-  .trap-hint{display:none;margin:6px 0 12px;padding:11px 14px;border-radius:10px;
+  .trap-hint{display:none;margin:12px 0 10px;padding:12px 14px;border-radius:10px;
     border:1.5px solid #ff8b3a;background:rgba(255,139,58,.12);color:#ffcaa0;
     font-size:15px;font-weight:800;text-align:center;animation:blink 1s infinite;}
   @keyframes blink{0%,100%{opacity:1;border-color:#ff8b3a}50%{opacity:.45;border-color:#ffd0a0}}
@@ -188,9 +188,9 @@
       <span class="lab" id="progLab">第 1 / 8 組</span>
     </div>
     <div class="q-title">如果 <b id="teamName">您支持的球隊</b> 有這兩種會員方案，請點選您<b>最可能加入</b>的方案？</div>
-    <div class="trap-hint" id="trapHint"></div>
     <div class="q-sub" id="qSub" style="display:none"></div>
     <div class="cards" id="cardWrap"></div>
+    <div class="trap-hint" id="trapHint"></div>
     <div class="none-opt" id="noneOpt" onclick="pickCard('none')">
       <span class="none-x">✕</span> 這兩個方案我都<b>不會加入</b>
     </div>

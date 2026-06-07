@@ -175,11 +175,10 @@ function renderItem(){
   const isTrap=(it.type==='trap');
   const trapBox=document.getElementById('trapHint');
   trapBox.style.display=isTrap?'block':'none';
-  if(isTrap) trapBox.textContent=`⚠ 注意力確認：本題請直接點選「方案 ${it.side}」`;
+  if(isTrap) trapBox.textContent=`⚠ 注意力確認：本題請直接點選上方的「方案 ${it.side}」`;
 
-  const qSub=document.getElementById('qSub');
-  qSub.style.display = isTrap ? 'block' : 'none';
-  if(isTrap) qSub.innerHTML='請依上方指示作答';
+  // trap 題不顯示上方 q-sub（指示集中在卡片下方的 trapHint，貼近目光落點）
+  document.getElementById('qSub').style.display='none';
 
   const wrap=document.getElementById('cardWrap'); wrap.innerHTML='';
   ['A','B'].forEach(side=>{
