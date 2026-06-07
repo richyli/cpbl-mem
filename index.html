@@ -11,7 +11,7 @@
     --ink:#f2f4f8; --muted:#9aa6b8; --accent:#d8843a;
     --cardA:#1a2233; --cardB:#1c1614;
     /* 球隊主視覺色（選隊後由 JS 覆寫；預設金色）*/
-    --team:#c8a24a; --team-glow:rgba(200,162,74,.16); --team-line:rgba(200,162,74,.5);
+    --team:#c8a24a; --team-card:#c8a24a; --team-glow:rgba(200,162,74,.16); --team-line:rgba(200,162,74,.5);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
@@ -65,7 +65,7 @@
 
   /* 虛擬會員卡頭圖（每方案頂部金屬卡面） */
   .card-chip{height:46px;margin:9px 10px 0;border-radius:8px;position:relative;overflow:hidden;
-    background:linear-gradient(120deg,#0d0d10 0%,var(--team) 55%,#f3e2b0 78%,var(--team) 100%);
+    background:linear-gradient(120deg,#0d0d10 0%,var(--team-card) 55%,#f3e2b0 78%,var(--team-card) 100%);
     border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;padding:0 11px;
     box-shadow:inset 0 1px 2px rgba(255,255,255,.25);}
   .card-chip .chip-en{font-size:10px;font-weight:900;font-style:italic;letter-spacing:1px;

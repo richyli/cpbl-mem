@@ -120,11 +120,13 @@ function startCBC(){
 // 依球隊主視覺色覆寫 CSS 變數（標題、選中態、卡面邊隨隊變色）
 function applyTeamTheme(){
   if(!state.teamObj) return;
-  const c=state.teamObj.color;
+  const ui=state.teamObj.ui||state.teamObj.color;   // 深底 UI 用提亮色
+  const card=state.teamObj.color;                    // 卡面漸層用官方色
   const root=document.documentElement.style;
-  root.setProperty('--team', c);
-  root.setProperty('--team-glow', hexA(c,0.16));
-  root.setProperty('--team-line', hexA(c,0.5));
+  root.setProperty('--team', ui);
+  root.setProperty('--team-card', card);
+  root.setProperty('--team-glow', hexA(ui,0.16));
+  root.setProperty('--team-line', hexA(ui,0.5));
 }
 // hex → rgba 字串
 function hexA(hex,a){
