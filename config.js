@@ -20,11 +20,12 @@ const CONFIG = {
 
   // ---- 6 屬性 × 各 4 水準（水準陣列順序 = 由低到高，index 0..3）----
   // levels[i].label = 卡片顯示文字；levels[i].tag = 分析用簡碼
+  // 水準數混合 4/3/4/2/4/4（使用者 2026-06-07 指定）。
+  // 注意 number-of-levels effect：水準數多者 importance 略被高估，已於 design memo 限制節承認。
   attributes: [
     {
       key: "price", name: "年度會員費", icon: "💳", cls: "A 金錢",
-      // 水準依 WTP 市場校準（見 analysis_output/wtp_market_benchmark.md）：
-      // 對齊卡片隨機權益組合的內容 WTP 區間（低配~900／中配~2,000／高配~3,000）
+      // 水準依 WTP 市場校準（見 analysis_output/wtp_market_benchmark.md）
       levels: [
         { tag: "699",  label: "699 元" },
         { tag: "1199", label: "1,199 元" },
@@ -33,49 +34,47 @@ const CONFIG = {
       ],
     },
     {
-      key: "discount", name: "消費折扣權益", icon: "🏷️", cls: "A 金錢",
+      key: "media", name: "獨家媒體內容", icon: "🎥", cls: "F 內容",
       levels: [
-        { tag: "none", label: "無折扣" },
-        { tag: "90",   label: "商城購物 9 折" },
-        { tag: "85",   label: "商城購物 85 折" },
-        { tag: "85pt", label: "商城購物 8 折＋滿額紅利點數回饋" },
+        { tag: "report",  label: "賽後戰報" },
+        { tag: "feature", label: "球員深度專訪" },
+        { tag: "locker",  label: "休息室幕後影音" },
+        { tag: "farm",    label: "二軍與新秀養成紀錄" },
       ],
     },
     {
-      key: "ticket", name: "優先購票權", icon: "🎟️", cls: "B 功能",
+      key: "ticket", name: "優先購票順位", icon: "🎟️", cls: "B 功能",
+      // 3 水準
       levels: [
-        { tag: "none", label: "無優先購票權" },
-        { tag: "p3",   label: "第三順位・每場限購 2 張" },
-        { tag: "p2",   label: "第二順位・每場限購 4 張" },
-        { tag: "p1",   label: "第一順位・每場限購 4 張" },
+        { tag: "p4", label: "第四順位・每場 2 張" },
+        { tag: "p3", label: "第三順位・每場 4 張" },
+        { tag: "p2", label: "第二順位・每場 4 張" },
       ],
     },
     {
-      key: "gift", name: "會員專屬贈品", icon: "🎁", cls: "C 情感",
+      key: "interact", name: "互動活動", icon: "🎤", cls: "E 社群",
+      levels: [
+        { tag: "none", label: "無互動活動" },
+        { tag: "qa",   label: "線上球迷問答" },
+        { tag: "vote", label: "會員限定投票" },
+        { tag: "meet", label: "球員見面會報名資格" },
+      ],
+    },
+    {
+      key: "lane", name: "專屬通道", icon: "🚪", cls: "D 主場",
+      // 2 水準（index0=低=無、index1=高=有，與其他屬性低→高一致）
+      levels: [
+        { tag: "no",  label: "無專屬通道" },
+        { tag: "yes", label: "有專屬通道" },
+      ],
+    },
+    {
+      key: "gift", name: "會員周邊", icon: "🎁", cls: "C 情感",
       levels: [
         { tag: "none",   label: "無實體贈品" },
+        { tag: "ball",   label: "紀念球" },
         { tag: "towel",  label: "球團限定毛巾" },
-        { tag: "jersey", label: "會員專屬球衣" },
-        { tag: "custom", label: "客製電繡球衣（背號＋姓名）" },
-      ],
-    },
-    {
-      key: "home", name: "主場參與與社群權益", icon: "🏟️", cls: "D+E 主場/社群",
-      levels: [
-        { tag: "none",  label: "無主場專屬權益" },
-        { tag: "disc50", label: "現場購票每張折 50 元" },
-        { tag: "lane",  label: "專屬通道＋提早 10 分鐘進場" },
-        { tag: "meet",  label: "球員見面會＋會員專屬活動報名資格" },
-      ],
-    },
-    {
-      key: "media", name: "獨家媒體內容", icon: "🎥", cls: "F 關係/接近",
-      // index 0 = baseline（一般公開內容）
-      levels: [
-        { tag: "report",  label: "賽後戰報（一般公開賽事內容）",            rel: "一般公開" },
-        { tag: "locker",  label: "休息室幕後花絮（賽前賽後、隊內非公開片段）", rel: "內部人" },
-        { tag: "micd",    label: "球員練球日常＋Mic'd up（訓練日常與場上原音）", rel: "靠近現場" },
-        { tag: "feature", label: "球員專訪與主題企畫（低潮調適、成長故事）",   rel: "理解球員" },
+        { tag: "tshirt", label: "會員專屬T恤" },
       ],
     },
   ],
