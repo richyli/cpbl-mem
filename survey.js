@@ -39,21 +39,39 @@ function teamize(txt){ return state.team ? txt.replace(/這支球隊/g, state.te
 const mediaIdx = A.findIndex(a=>a.key===MEDIA_KEY);
 const priceIdx = A.findIndex(a=>a.key==='price');
 
-/* 產生一輪兩 profile（level index 陣列），避免支配 + 完全相同。
-   media(無高低序)不納入支配判斷。 */
+/* 有「無」水準的屬性（index 0 = 無 X）：折扣/購票/贈品/主場。
+   價格無「無」；media 的 index 0 是「賽後戰報」非「無」→ 皆排除。 */
+const noneAttrs = A.map((_,i)=>i).filter(i=>/^無/.test(A[i].levels[0].label));
+
+/* 產生一輪兩 profile（level index 陣列）。
+   核心規則（強制 trade-off）：每張卡恰好一個屬性是「無」水準，
+   且左右兩卡的「無」落在不同屬性 → 兩卡各有一弱點、互有優劣，避免一卡全面較好。
+   其餘屬性抽非「無」水準（index ≥1；media 維持全 0~3）。 */
+function pickProfile(noneIdx){
+  return A.map((_,i)=>{
+    if(i===noneIdx) return 0;                 // 指定屬性 = 無
+    if(i===priceIdx) return randLevel(i);     // 價格全水準隨機
+    if(i===mediaIdx) return randLevel(i);     // media 全水準隨機（含 baseline）
+    if(noneAttrs.includes(i)) return 1+Math.floor(Math.random()*(A[i].levels.length-1)); // 其餘有「無」屬性 → 抽非無
+    return randLevel(i);
+  });
+}
 function genPair(){
   const domAttrs = A.map((_,i)=>i).filter(i=>i!==mediaIdx);
   for(let t=0;t<60;t++){
-    const pA=A.map((_,i)=>randLevel(i)), pB=A.map((_,i)=>randLevel(i));
+    // 左右各指定一個「無」屬性，且兩者不同
+    const shuffled=shuffle(noneAttrs);
+    const noneA=shuffled[0], noneB=shuffled[1];
+    const pA=pickProfile(noneA), pB=pickProfile(noneB);
     if(pA.every((v,i)=>v===pB[i])) continue;            // 完全相同 → 重抽
     const aGE=domAttrs.every(i=>pA[i]>=pB[i]);
     const bGE=domAttrs.every(i=>pB[i]>=pA[i]);
-    if(aGE||bGE) continue;                              // 一卡支配 → 重抽
+    if(aGE||bGE) continue;                              // 一卡支配 → 重抽（理論上已不會發生，保險）
     return {A:pA,B:pB};
   }
-  let pA,pB; do{pA=A.map((_,i)=>randLevel(i));pB=A.map((_,i)=>randLevel(i));}
-  while(pA.every((v,i)=>v===pB[i]));
-  return {A:pA,B:pB};
+  // 保底
+  const sh=shuffle(noneAttrs);
+  return {A:pickProfile(sh[0]), B:pickProfile(sh[1])};
 }
 
 /* 建構呈現序列 */
@@ -127,6 +145,16 @@ function applyTeamTheme(){
   root.setProperty('--team-card', card);
   root.setProperty('--team-glow', hexA(ui,0.16));
   root.setProperty('--team-line', hexA(ui,0.5));
+  // 依提亮隊色亮度自動選字色：亮底(如中信黃)用深字、暗底(如富邦藍)用白字
+  root.setProperty('--chip-fg', isLight(ui) ? '#1a1306' : '#ffffff');
+  root.setProperty('--chip-sh', isLight(ui) ? 'rgba(255,255,255,.5)' : 'rgba(0,0,0,.55)');
+}
+// 相對亮度判斷（>0.55 視為亮色，需深字）
+function isLight(hex){
+  const m=hex.replace('#','');
+  const r=parseInt(m.substring(0,2),16),g=parseInt(m.substring(2,4),16),b=parseInt(m.substring(4,6),16);
+  const a=[r,g,b].map(v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);});
+  return (0.2126*a[0]+0.7152*a[1]+0.0722*a[2])>0.5;
 }
 // hex → rgba 字串
 function hexA(hex,a){
