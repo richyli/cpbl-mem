@@ -177,9 +177,9 @@ function renderItem(){
   trapBox.style.display=isTrap?'block':'none';
   if(isTrap) trapBox.textContent=`⚠ 注意力確認：本題請直接點選「方案 ${it.side}」`;
 
-  document.getElementById('qSub').innerHTML = isTrap
-    ? '請依上方指示作答'
-    : '請點選您<b>比較可能加入</b>的方案';
+  const qSub=document.getElementById('qSub');
+  qSub.style.display = isTrap ? 'block' : 'none';
+  if(isTrap) qSub.innerHTML='請依上方指示作答';
 
   const wrap=document.getElementById('cardWrap'); wrap.innerHTML='';
   ['A','B'].forEach(side=>{
@@ -196,11 +196,9 @@ function renderItem(){
       rows+=`<li>${mark}<span class="ic">${A[i].icon}</span><span class="vv">${lv.label}</span></li>`;
     });
     const en=state.teamObj?state.teamObj.en:'';
-    card.innerHTML=`<div class="card-chip"><span class="chip-en">${en} ・ ${side}</span><span class="chip-ic"></span></div>
-      <div class="cap">方案 ${side}</div>
+    card.innerHTML=`<div class="card-chip"><span class="chip-en">方案 ${side}　${en}</span><span class="chip-ic"></span></div>
       <div class="price-tag"><span class="num">${priceLab.replace(' 元','')}</span><span class="unit"> 元 / 年</span></div>
-      <ul class="rows">${rows}</ul>
-      <div class="pick-foot">點此選擇</div>`;
+      <ul class="rows">${rows}</ul>`;
     card.onclick=()=>pickCard(side);
     wrap.appendChild(card);
   });
@@ -241,7 +239,6 @@ function pickCard(side){
   it.pick=side;
   document.querySelectorAll('#cardWrap .mcard').forEach(c=>{
     c.classList.toggle('picked',c.dataset.side===side);
-    c.querySelector('.pick-foot').textContent=(c.dataset.side===side)?'✓ 已選擇':'點此選擇';
   });
   document.getElementById('noneOpt').classList.toggle('picked',side==='none');
   refreshNext();
