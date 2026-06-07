@@ -23,11 +23,13 @@ const CONFIG = {
   attributes: [
     {
       key: "price", name: "單季會員費", icon: "💳", cls: "A 金錢",
+      // 水準依 WTP 市場校準（見 analysis_output/wtp_market_benchmark.md）：
+      // 對齊卡片隨機權益組合的內容 WTP 區間（低配~900／中配~2,000／高配~3,000）
       levels: [
         { tag: "699",  label: "699 元" },
-        { tag: "1280", label: "1,280 元" },
+        { tag: "1199", label: "1,199 元" },
         { tag: "1999", label: "1,999 元" },
-        { tag: "3880", label: "3,880 元" },
+        { tag: "2999", label: "2,999 元" },
       ],
     },
     {
