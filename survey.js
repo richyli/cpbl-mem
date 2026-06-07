@@ -17,7 +17,7 @@ const state = {
   seq:[],                // 呈現序列：{type:'cbc'|'trap'|'rep', ...}
   pos:0,                 // 目前在 seq 的位置
   scales:{}, marker:null, demo:{},
-  leftCount:0, trialCount:0,
+  leftCount:0, trialCount:0, abCount:0,
   startTs:Date.now(), qStartTs:0,
 };
 
@@ -33,6 +33,8 @@ function shuffle(arr){
   return a;
 }
 function randLevel(i){ return Math.floor(Math.random()*A[i].levels.length); }
+// 量表文字把「這支球隊」代入受訪者選的隊名
+function teamize(txt){ return state.team ? txt.replace(/這支球隊/g, state.team) : txt; }
 const mediaIdx = A.findIndex(a=>a.key===MEDIA_KEY);
 const priceIdx = A.findIndex(a=>a.key==='price');
 
@@ -148,7 +150,12 @@ function renderItem(){
     wrap.appendChild(card);
   });
 
-  it.pick=null; it.dual=null;
+  // None 選項：trap 題不顯示（指示型必須點 A/B）
+  const noneEl=document.getElementById('noneOpt');
+  noneEl.style.display=isTrap?'none':'block';
+  noneEl.classList.remove('picked');
+
+  it.pick=null;
   document.getElementById('cbcNext').disabled=true;
   document.getElementById('cbcErr').textContent='';
   document.getElementById('cbcNext').textContent=(state.pos===total-1)?'完成 ▸':'下一題 ▸';
@@ -156,11 +163,13 @@ function renderItem(){
 
 function pickCard(side){
   const it=state.seq[state.pos];
+  if(side==='none' && it.type==='trap') return; // trap 不可選 none
   it.pick=side;
   document.querySelectorAll('#cardWrap .mcard').forEach(c=>{
     c.classList.toggle('picked',c.dataset.side===side);
     c.querySelector('.pick-foot').textContent=(c.dataset.side===side)?'✓ 已選擇':'點此選擇';
   });
+  document.getElementById('noneOpt').classList.toggle('picked',side==='none');
   document.getElementById('cbcNext').disabled=false;
 }
 function nextRound(){
@@ -169,7 +178,8 @@ function nextRound(){
   // 記錄 rtMs / leftRatio（trap、rep 也計位置統計）
   it.rtMs=Date.now()-state.qStartTs;
   state.trialCount++;
-  if(it.pick==='A') state.leftCount++; // A=左
+  if(it.pick==='A'||it.pick==='B') state.abCount++;   // leftRatio 分母只計 A/B
+  if(it.pick==='A') state.leftCount++;                // A=左
   if(it.type==='trap') it.pass=(it.pick===it.side);
 
   if(state.pos<totalShown()-1){ state.pos++; renderItem(); }
@@ -182,7 +192,7 @@ function buildScales(){
   // 收集所有量表題（含 marker），打散後亂序呈現
   const all=[];
   Object.entries(CONFIG.scales).forEach(([key,sc])=>{
-    sc.items.forEach((txt,idx)=>all.push({id:`${key}_${idx+1}`, txt, isMarker:false}));
+    sc.items.forEach((txt,idx)=>all.push({id:`${key}_${idx+1}`, txt:teamize(txt), isMarker:false}));
   });
   all.push({id:'marker', txt:CONFIG.marker, isMarker:true});
   const order=shuffle(all);
@@ -231,7 +241,8 @@ function flatten(){
     s1:state.s1, team:state.team,
     attrOrder:state.attrOrder.map(i=>A[i].key).join('|'),
     n_rounds:NROUND,
-    leftRatio:(state.trialCount? (state.leftCount/state.trialCount):0).toFixed(3),
+    leftRatio:(state.abCount? (state.leftCount/state.abCount):0).toFixed(3),
+    none_count:state.seq.filter(s=>s.type==='cbc'&&s.pick==='none').length, // 正式輪選 none 次數
     minAnswerSec:CONFIG.MIN_ANSWER_SEC,
   };
   // 正式 CBC 輪
@@ -256,14 +267,19 @@ function flatten(){
   const rep=state.seq.find(s=>s.type==='rep');
   const srcRound=state.seq.find(s=>s.type==='cbc'&&s.idx===CONFIG.REP_SRC_IDX);
   if(rep&&srcRound){
-    // 比「選到哪張卡」：來源題的 pick 對應的 profile，鏡像後同 profile 在哪一側
+    // 比「選到哪張卡」：來源題 pick 對應的 profile，鏡像後同 profile 在哪一側
     // rep.pair.A = src.pair.B；故來源選 A → 同 profile 在 rep 的 B 側
-    const srcPickProfileSide = srcRound.pick;                  // 'A'|'B'
-    const repSameProfileSide = (srcPickProfileSide==='A')?'B':'A'; // 鏡像後同卡的側
+    const srcPick=srcRound.pick;                               // 'A'|'B'|'none'
+    let consistent;
+    if(srcPick==='none'){ consistent=(rep.pick==='none'); }    // 都不選 → 一致
+    else{
+      const repSameSide=(srcPick==='A')?'B':'A';               // 鏡像後同卡的側
+      consistent=(rep.pick===repSameSide);
+    }
     out['rep_of']=CONFIG.REP_SRC_IDX+1;
-    out['rep_orig']=srcPickProfileSide;
+    out['rep_orig']=srcPick;
     out['rep_again']=rep.pick;
-    out['rep_consistent']=(rep.pick===repSameProfileSide)?'yes':'no';
+    out['rep_consistent']=consistent?'yes':'no';
     out['rep_rtMs']=rep.rtMs;
   }
   // 量表 + marker + 人口

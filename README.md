@@ -2,12 +2,16 @@
 
 職棒會員卡風格的 CBC 網頁問卷。單檔 `index.html` + `config.js`（設計）+ `survey.js`（邏輯）。
 
+**線上問卷**：<https://richyli.github.io/cpbl-mem/>（repo `richyli/cpbl-mem`）
+**SheetMonkey**：`https://api.sheetmonkey.io/form/493MeKnuRjhvuguNAC4Ujo`
+
 ## 設計
 - 6 屬性 × 各 4 水準（見 `../analysis_output/design_memo_classified.md`）
 - CBC 二選一、**8 正式輪**；另插 1 trap + 1 鏡像重複 = 共 10 個呈現題
 - 屬性順序：受訪者間隨機、受訪者內固定
 - 水準：每輪即時隨機；避免支配組合 + 完全相同 + 同質媒體
-- dual-response：每輪選完再問「是否真的會加入」
+- None 選項：每輪除方案 A/B 外，提供「兩個都不會加入」第三選項（3-alt CBC，可估 adoption/市場滲透）
+- 量表題自動代入受訪者選的隊名（「這支球隊」→ 如「味全龍」）
 - 三組量表（球隊認同/社群認同/知覺價值）+ marker 題（CMV）+ 人口題
 
 ## 七條品質檢核對應（SoT: wiki/conjoint_webform_quality_checks.md）

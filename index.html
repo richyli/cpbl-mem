@@ -83,6 +83,15 @@
     background:rgba(255,255,255,.04);border-top:1px solid var(--line);color:var(--muted);}
   .mcard.picked .pick-foot{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#1a1306;}
 
+  /* None 選項 */
+  .none-opt{margin-top:12px;border:1.5px dashed var(--line);border-radius:12px;
+    padding:13px;text-align:center;cursor:pointer;color:var(--muted);font-size:15px;
+    background:var(--panel2);transition:.14s;}
+  .none-opt:active{transform:scale(.99);}
+  .none-opt.picked{border-style:solid;border-color:var(--gold);
+    background:rgba(200,162,74,.14);color:var(--gold2);font-weight:700;}
+  .none-opt .none-x{margin-right:6px;font-weight:900;}
+
   /* 量表 */
   .scale-block{margin-bottom:22px;}
   .scale-block h3{font-size:16px;color:var(--gold2);margin:0 0 6px;}
@@ -160,6 +169,9 @@
     <div class="trap-hint" id="trapHint"></div>
     <div class="q-sub" id="qSub">請點選您<b>比較可能加入</b>的方案</div>
     <div class="cards" id="cardWrap"></div>
+    <div class="none-opt" id="noneOpt" onclick="pickCard('none')">
+      <span class="none-x">✕</span> 這兩個方案我都<b>不會加入</b>
+    </div>
     <div class="err" id="cbcErr"></div>
     <button class="btn" id="cbcNext" disabled onclick="nextRound()">下一組 ▸</button>
   </section>
