@@ -9,7 +9,7 @@ const CONFIG = {
 
   ROUNDS: 8,          // 正式 CBC 共 8 輪（不含 trap、repeat）
   ENABLE_NONE: false, // 不問「是否真的會加入」（移除 dual-response）
-  MIN_ANSWER_SEC: 2,  // 低於此記錄為過快（不強擋，事後敏感度分析）
+  MIN_ANSWER_SEC: 3,  // 每題最短作答秒數（前端硬限制：未到不能按下一題）
 
   // 注意力 trap：插在第 1 題之後，指定須點哪一張
   TRAP_AFTER: 1,      // 第 1 題後插入 trap

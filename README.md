@@ -20,7 +20,7 @@
 | 1 | 鏡像重複一致性 | 第3輪於第7位鏡像重現，比選到哪張卡 | `rep_of/_orig/_again/_consistent/_rtMs` |
 | 2 | 注意力 trap | 第2位插入「請點方案 A」，題幹閃爍 | `trap_side/_pick/_pass/_rtMs` |
 | 3 | leftRatio | 選 A(左)次數/總題 | `leftRatio` |
-| 4 | rtMs | 每題反應時間；minAnswerSec=2 記錄不擋 | `r*_rtMs`、`minAnswerSec` |
+| 4 | rtMs + 最短秒數硬限制 | 每題反應時間；**minAnswerSec=3，未到「下一題」鎖住並顯示倒數**（trap 同樣套用）| `r*_rtMs`、`minAnswerSec` |
 | 5 | dominance | genPair 排除一卡全屬性 ≥ 另一卡 | 設計階段保證 |
 | 6 | identical 重抽 | genPair 排除兩卡完全相同 | 設計階段保證 |
 | 7 | 同質媒體重抽 | media 無高低序，不納支配判斷；其餘由 5/6 涵蓋 | — |

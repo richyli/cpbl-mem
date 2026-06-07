@@ -19,6 +19,7 @@ const state = {
   scales:{}, marker:null, demo:{},
   leftCount:0, trialCount:0, abCount:0,
   startTs:Date.now(), qStartTs:0,
+  gateEnd:0, gateTimer:null,   // 每題最短秒數倒數鎖
 };
 
 /* ---------- 工具 ---------- */
@@ -156,9 +157,28 @@ function renderItem(){
   noneEl.classList.remove('picked');
 
   it.pick=null;
-  document.getElementById('cbcNext').disabled=true;
   document.getElementById('cbcErr').textContent='';
-  document.getElementById('cbcNext').textContent=(state.pos===total-1)?'完成 ▸':'下一題 ▸';
+  // 啟動每題最短秒數倒數鎖
+  state.gateEnd=Date.now()+CONFIG.MIN_ANSWER_SEC*1000;
+  if(state.gateTimer) clearInterval(state.gateTimer);
+  state.gateTimer=setInterval(refreshNext,200);
+  refreshNext();
+}
+
+// 統一控制「下一題」鈕：需同時滿足「已選」+「秒數已到」
+function refreshNext(){
+  const it=state.seq[state.pos];
+  const btn=document.getElementById('cbcNext');
+  const remain=Math.ceil((state.gateEnd-Date.now())/1000);
+  const last=(state.pos===totalShown()-1);
+  if(remain>0){
+    btn.disabled=true;
+    btn.textContent=`請再看 ${remain} 秒…`;
+    return;
+  }
+  if(state.gateTimer){ clearInterval(state.gateTimer); state.gateTimer=null; }
+  btn.textContent=last?'完成 ▸':'下一題 ▸';
+  btn.disabled=(it.pick===null);
 }
 
 function pickCard(side){
@@ -170,11 +190,13 @@ function pickCard(side){
     c.querySelector('.pick-foot').textContent=(c.dataset.side===side)?'✓ 已選擇':'點此選擇';
   });
   document.getElementById('noneOpt').classList.toggle('picked',side==='none');
-  document.getElementById('cbcNext').disabled=false;
+  refreshNext();
 }
 function nextRound(){
   const it=state.seq[state.pos];
   if(!it.pick){ document.getElementById('cbcErr').textContent='請先選擇一個方案'; return; }
+  if(Date.now()<state.gateEnd){ document.getElementById('cbcErr').textContent='請再多看幾秒'; return; } // 秒數防呆
+  if(state.gateTimer){ clearInterval(state.gateTimer); state.gateTimer=null; }
   // 記錄 rtMs / leftRatio（trap、rep 也計位置統計）
   it.rtMs=Date.now()-state.qStartTs;
   state.trialCount++;
