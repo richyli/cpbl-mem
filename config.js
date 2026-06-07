@@ -22,7 +22,7 @@ const CONFIG = {
   // levels[i].label = 卡片顯示文字；levels[i].tag = 分析用簡碼
   attributes: [
     {
-      key: "price", name: "單季會員費", icon: "💳", cls: "A 金錢",
+      key: "price", name: "年度會員費", icon: "💳", cls: "A 金錢",
       // 水準依 WTP 市場校準（見 analysis_output/wtp_market_benchmark.md）：
       // 對齊卡片隨機權益組合的內容 WTP 區間（低配~900／中配~2,000／高配~3,000）
       levels: [

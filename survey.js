@@ -198,7 +198,7 @@ function renderItem(){
     const en=state.teamObj?state.teamObj.en:'';
     card.innerHTML=`<div class="card-chip"><span class="chip-en">${en} ・ ${side}</span><span class="chip-ic"></span></div>
       <div class="cap">方案 ${side}</div>
-      <div class="price-tag"><span class="num">${priceLab.replace(' 元','')}</span><span class="unit"> 元 / 單季</span></div>
+      <div class="price-tag"><span class="num">${priceLab.replace(' 元','')}</span><span class="unit"> 元 / 年</span></div>
       <ul class="rows">${rows}</ul>
       <div class="pick-foot">點此選擇</div>`;
     card.onclick=()=>pickCard(side);
