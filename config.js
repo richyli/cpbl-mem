@@ -80,10 +80,14 @@ const CONFIG = {
     },
   ],
 
-  // ---- S2：六支中職球隊 ----
+  // ---- S2：六支中職球隊（含英文名 + 主視覺色，用於 CBC 標題與卡面）----
   teams: [
-    "中信兄弟", "統一 7-ELEVEn 獅", "樂天桃猿",
-    "富邦悍將", "味全龍", "台鋼雄鷹",
+    { zh:"中信兄弟",          en:"CTBC BROTHERS",   color:"#d4a017" },
+    { zh:"統一 7-ELEVEn 獅",  en:"UNI-LIONS",       color:"#e36c1f" },
+    { zh:"樂天桃猿",          en:"RAKUTEN MONKEYS", color:"#b8860b" },
+    { zh:"富邦悍將",          en:"FUBON GUARDIANS", color:"#1b62b3" },
+    { zh:"味全龍",            en:"WEI CHUAN DRAGONS",color:"#c0392b" },
+    { zh:"台鋼雄鷹",          en:"TSG HAWKS",       color:"#1f9e7a" },
   ],
 
   // ---- 量表（LCA 外部效標：球隊認同 / 球迷社群認同 / 知覺價值）----

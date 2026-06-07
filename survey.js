@@ -92,9 +92,9 @@ function pickS1(el,v){
 function buildS2(){
   const row=document.getElementById('s2row'); row.innerHTML='';
   CONFIG.teams.forEach(t=>{
-    const d=document.createElement('div'); d.className='chip'; d.textContent=t;
+    const d=document.createElement('div'); d.className='chip'; d.textContent=t.zh;
     d.onclick=()=>{document.querySelectorAll('#s2row .chip').forEach(c=>c.classList.remove('sel'));
-      d.classList.add('sel'); state.team=t; checkScreen();};
+      d.classList.add('sel'); state.team=t.zh; state.teamObj=t; checkScreen();};
     row.appendChild(d);
   });
 }
@@ -105,12 +105,32 @@ function checkScreen(){
 function startCBC(){
   if(state.s1==='no'){ go('s-out'); return; }
   if(!state.team){ document.getElementById('screenErr').textContent='請選擇一支球隊'; return; }
+  applyTeamTheme();                     // 依選的隊套主視覺色調
   state.attrOrder=shuffle(A.map((_,i)=>i));
   buildSeq();
   state.pos=0;
   document.getElementById('teamName').textContent=state.team;
   document.getElementById('teamName2').textContent=state.team;
+  // CBC 頂部大型英文隊名
+  const tt=document.getElementById('teamTitleEn');
+  if(tt) tt.textContent=state.teamObj ? state.teamObj.en : '';
   go('s-cbc'); renderItem();
+}
+
+// 依球隊主視覺色覆寫 CSS 變數（標題、選中態、卡面邊隨隊變色）
+function applyTeamTheme(){
+  if(!state.teamObj) return;
+  const c=state.teamObj.color;
+  const root=document.documentElement.style;
+  root.setProperty('--team', c);
+  root.setProperty('--team-glow', hexA(c,0.16));
+  root.setProperty('--team-line', hexA(c,0.5));
+}
+// hex → rgba 字串
+function hexA(hex,a){
+  const m=hex.replace('#','');
+  const r=parseInt(m.substring(0,2),16),g=parseInt(m.substring(2,4),16),b=parseInt(m.substring(4,6),16);
+  return `rgba(${r},${g},${b},${a})`;
 }
 
 /* ---------- 渲染序列中的一題 ---------- */
@@ -141,9 +161,13 @@ function renderItem(){
     state.attrOrder.forEach(i=>{
       if(i===priceIdx) return;
       const lv=A[i].levels[prof[i]];
-      rows+=`<li><span class="ic">${A[i].icon}</span><span class="vv">${lv.label}</span></li>`;
+      const has=!/^無/.test(lv.label);                 // 「無…」水準→✕，其餘→○
+      const mark=has?'<span class="mk yes">○</span>':'<span class="mk no">✕</span>';
+      rows+=`<li>${mark}<span class="ic">${A[i].icon}</span><span class="vv">${lv.label}</span></li>`;
     });
-    card.innerHTML=`<div class="cap">方案 ${side}</div>
+    const en=state.teamObj?state.teamObj.en:'';
+    card.innerHTML=`<div class="card-chip"><span class="chip-en">${en} ・ ${side}</span><span class="chip-ic"></span></div>
+      <div class="cap">方案 ${side}</div>
       <div class="price-tag"><span class="num">${priceLab.replace(' 元','')}</span><span class="unit"> 元 / 單季</span></div>
       <ul class="rows">${rows}</ul>
       <div class="pick-foot">點此選擇</div>`;

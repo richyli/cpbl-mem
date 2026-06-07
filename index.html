@@ -10,6 +10,8 @@
     --gold:#c8a24a; --gold2:#e8c878; --line:#2a323f;
     --ink:#f2f4f8; --muted:#9aa6b8; --accent:#d8843a;
     --cardA:#1a2233; --cardB:#1c1614;
+    /* 球隊主視覺色（選隊後由 JS 覆寫；預設金色）*/
+    --team:#c8a24a; --team-glow:rgba(200,162,74,.16); --team-line:rgba(200,162,74,.5);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
@@ -50,10 +52,28 @@
   /* ---- 進度 ---- */
   .prog{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
   .prog .bar{flex:1;height:6px;background:var(--line);border-radius:4px;overflow:hidden;}
-  .prog .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));width:0;transition:width .3s;}
+  .prog .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--team),var(--gold2));width:0;transition:width .3s;}
   .prog .lab{font-size:13px;color:var(--muted);white-space:nowrap;}
 
   /* ---- CBC 兩卡並排 ---- */
+  /* CBC 頂部大型英文隊名 banner（仿職棒會員圖） */
+  .cbc-banner{text-align:center;margin:4px 0 10px;line-height:.92;}
+  .cbc-banner span{font-size:34px;font-weight:900;letter-spacing:1px;font-style:italic;
+    color:transparent;-webkit-text-stroke:1.2px var(--team);
+    text-shadow:0 0 18px var(--team-glow);}
+  @media(max-width:560px){.cbc-banner span{font-size:24px;}}
+
+  /* 虛擬會員卡頭圖（每方案頂部金屬卡面） */
+  .card-chip{height:46px;margin:9px 10px 0;border-radius:8px;position:relative;overflow:hidden;
+    background:linear-gradient(120deg,#0d0d10 0%,var(--team) 55%,#f3e2b0 78%,var(--team) 100%);
+    border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;padding:0 11px;
+    box-shadow:inset 0 1px 2px rgba(255,255,255,.25);}
+  .card-chip .chip-en{font-size:10px;font-weight:900;font-style:italic;letter-spacing:1px;
+    color:rgba(0,0,0,.62);text-transform:uppercase;}
+  .card-chip .chip-ic{position:absolute;right:9px;width:16px;height:16px;border-radius:50%;
+    background:rgba(255,255,255,.85);box-shadow:0 0 6px rgba(255,255,255,.6);}
+  @media(max-width:560px){.card-chip{height:40px;}}
+
   .q-title{font-size:15px;color:var(--muted);margin-bottom:4px;}
   .q-sub{font-size:13px;color:var(--accent);margin-bottom:14px;}
   .trap-hint{display:none;margin:6px 0 12px;padding:11px 14px;border-radius:10px;
@@ -66,7 +86,7 @@
     background:var(--cardA);display:flex;flex-direction:column;transition:.14s;position:relative;}
   .mcard.B{background:var(--cardB);}
   .mcard:active{transform:scale(.99);}
-  .mcard.picked{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold) inset, 0 6px 22px rgba(200,162,74,.25);}
+  .mcard.picked{border-color:var(--team);box-shadow:0 0 0 2px var(--team) inset, 0 6px 22px var(--team-glow);}
   .mcard .cap{padding:6px 10px;text-align:center;font-weight:900;font-size:14px;letter-spacing:2px;
     background:linear-gradient(180deg,rgba(255,255,255,.06),transparent);border-bottom:1px solid var(--line);}
   .mcard.A .cap{color:#9ec1ff;}
@@ -77,19 +97,23 @@
   .rows{list-style:none;margin:0;padding:2px 0;flex:1;}
   .rows li{display:flex;gap:7px;padding:5px 11px;font-size:12.5px;line-height:1.35;border-bottom:1px solid rgba(255,255,255,.04);}
   .rows li:last-child{border-bottom:none;}
+  .rows li .mk{flex:0 0 16px;text-align:center;font-weight:900;}
+  .rows li .mk.yes{color:var(--team);}
+  .rows li .mk.no{color:#5a6470;}
   .rows li .ic{flex:0 0 18px;text-align:center;}
   .rows li .vv{flex:1;}
+  .rows li:has(.mk.no) .vv{color:var(--muted);}
   .pick-foot{padding:7px;text-align:center;font-weight:800;font-size:13.5px;
     background:rgba(255,255,255,.04);border-top:1px solid var(--line);color:var(--muted);}
-  .mcard.picked .pick-foot{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#1a1306;}
+  .mcard.picked .pick-foot{background:linear-gradient(180deg,var(--gold2),var(--team));color:#1a1306;}
 
   /* None 選項 */
   .none-opt{margin-top:12px;border:1.5px dashed var(--line);border-radius:12px;
     padding:13px;text-align:center;cursor:pointer;color:var(--muted);font-size:15px;
     background:var(--panel2);transition:.14s;}
   .none-opt:active{transform:scale(.99);}
-  .none-opt.picked{border-style:solid;border-color:var(--gold);
-    background:rgba(200,162,74,.14);color:var(--gold2);font-weight:700;}
+  .none-opt.picked{border-style:solid;border-color:var(--team);
+    background:var(--team-glow);color:var(--gold2);font-weight:700;}
   .none-opt .none-x{margin-right:6px;font-weight:900;}
 
   /* 量表 */
@@ -161,6 +185,7 @@
 
   <!-- 2. CBC -->
   <section id="s-cbc" class="screen">
+    <div class="cbc-banner"><span id="teamTitleEn">TEAM</span></div>
     <div class="prog">
       <div class="bar"><i id="progBar"></i></div>
       <span class="lab" id="progLab">第 1 / 8 組</span>
