@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>中職球團付費會員方案・偏好調查</title>
+<style>
+  :root{
+    --bg:#0a0d14; --panel:#11161f; --panel2:#161c28;
+    --gold:#c8a24a; --gold2:#e8c878; --line:#2a323f;
+    --ink:#f2f4f8; --muted:#9aa6b8; --accent:#d8843a;
+    --cardA:#1a2233; --cardB:#1c1614;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    line-height:1.6;}
+  .wrap{max-width:760px;margin:0 auto;padding:18px 14px 60px;}
+  .screen{display:none;}
+  .screen.active{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ---- 標頭：職棒會員卡風格 ---- */
+  .hdr{text-align:center;padding:22px 0 8px;border-bottom:1px solid var(--line);margin-bottom:18px;}
+  .hdr .kbadge{display:inline-block;font-size:11px;letter-spacing:3px;color:var(--gold);
+    border:1px solid var(--gold);border-radius:3px;padding:3px 10px;margin-bottom:12px;}
+  .hdr h1{margin:0;font-size:26px;font-weight:900;letter-spacing:2px;
+    background:linear-gradient(180deg,#fff 0%,var(--gold2) 60%,var(--gold) 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .hdr .en{font-size:12px;letter-spacing:5px;color:var(--muted);margin-top:4px;}
+
+  h2{font-size:19px;font-weight:800;letter-spacing:1px;margin:4px 0 14px;color:var(--gold2);}
+  p.lead{color:var(--muted);font-size:15px;}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px;}
+
+  .btn{display:block;width:100%;border:none;border-radius:10px;cursor:pointer;
+    font-size:17px;font-weight:800;letter-spacing:1px;padding:15px;margin-top:8px;
+    background:linear-gradient(180deg,var(--gold2),var(--gold));color:#1a1306;
+    transition:transform .1s,filter .15s;}
+  .btn:active{transform:scale(.985);}
+  .btn:disabled{filter:grayscale(.7) brightness(.6);cursor:not-allowed;}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:600;font-size:15px;}
+
+  .radio-row{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0;}
+  .chip{flex:1 1 auto;min-width:30%;text-align:center;border:1px solid var(--line);
+    border-radius:10px;padding:13px 8px;cursor:pointer;background:var(--panel2);
+    font-size:15px;font-weight:600;transition:.12s;}
+  .chip.sel{border-color:var(--gold);background:rgba(200,162,74,.14);color:var(--gold2);}
+
+  /* ---- 進度 ---- */
+  .prog{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .prog .bar{flex:1;height:6px;background:var(--line);border-radius:4px;overflow:hidden;}
+  .prog .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));width:0;transition:width .3s;}
+  .prog .lab{font-size:13px;color:var(--muted);white-space:nowrap;}
+
+  /* ---- CBC 兩卡並排 ---- */
+  .q-title{font-size:15px;color:var(--muted);margin-bottom:4px;}
+  .q-sub{font-size:13px;color:var(--accent);margin-bottom:14px;}
+  .trap-hint{display:none;margin:6px 0 12px;padding:11px 14px;border-radius:10px;
+    border:1.5px solid #ff8b3a;background:rgba(255,139,58,.12);color:#ffcaa0;
+    font-size:15px;font-weight:800;text-align:center;animation:blink 1s infinite;}
+  @keyframes blink{0%,100%{opacity:1;border-color:#ff8b3a}50%{opacity:.45;border-color:#ffd0a0}}
+  .sign{text-align:center;font-size:12px;color:var(--muted);letter-spacing:1px;margin-top:26px;}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .mcard{border:1.5px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;
+    background:var(--cardA);display:flex;flex-direction:column;transition:.14s;position:relative;}
+  .mcard.B{background:var(--cardB);}
+  .mcard:active{transform:scale(.99);}
+  .mcard.picked{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold) inset, 0 6px 22px rgba(200,162,74,.25);}
+  .mcard .cap{padding:6px 10px;text-align:center;font-weight:900;font-size:14px;letter-spacing:2px;
+    background:linear-gradient(180deg,rgba(255,255,255,.06),transparent);border-bottom:1px solid var(--line);}
+  .mcard.A .cap{color:#9ec1ff;}
+  .mcard.B .cap{color:#e9b07a;}
+  .price-tag{text-align:center;padding:5px 8px 6px;border-bottom:1px dashed var(--line);}
+  .price-tag .num{font-size:23px;font-weight:900;color:var(--gold2);line-height:1.05;}
+  .price-tag .unit{font-size:11px;color:var(--muted);}
+  .rows{list-style:none;margin:0;padding:2px 0;flex:1;}
+  .rows li{display:flex;gap:7px;padding:5px 11px;font-size:12.5px;line-height:1.35;border-bottom:1px solid rgba(255,255,255,.04);}
+  .rows li:last-child{border-bottom:none;}
+  .rows li .ic{flex:0 0 18px;text-align:center;}
+  .rows li .vv{flex:1;}
+  .pick-foot{padding:7px;text-align:center;font-weight:800;font-size:13.5px;
+    background:rgba(255,255,255,.04);border-top:1px solid var(--line);color:var(--muted);}
+  .mcard.picked .pick-foot{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#1a1306;}
+
+  /* 量表 */
+  .scale-block{margin-bottom:22px;}
+  .scale-block h3{font-size:16px;color:var(--gold2);margin:0 0 6px;}
+  .likert-item{padding:12px 0;border-bottom:1px solid var(--line);}
+  .likert-item .qt{font-size:14.5px;margin-bottom:9px;}
+  .likert{display:flex;gap:5px;}
+  .likert button{flex:1;border:1px solid var(--line);background:var(--panel2);color:var(--muted);
+    border-radius:8px;padding:9px 0;font-size:14px;font-weight:700;cursor:pointer;}
+  .likert button.sel{border-color:var(--gold);background:rgba(200,162,74,.16);color:var(--gold2);}
+  .likert-scale-hint{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px;}
+
+  .note{font-size:12.5px;color:var(--muted);margin-top:10px;}
+  .err{color:#ff8b7a;font-size:13px;margin-top:8px;min-height:18px;}
+  a{color:var(--gold2);}
+  /* 手機：兩卡改上下排列，單一直式螢幕內呈現 */
+  @media(max-width:560px){
+    .cards{grid-template-columns:1fr;gap:10px;}
+    .rows li{font-size:13px;padding:8px 10px;}
+    .price-tag .num{font-size:26px;}
+    .mcard .cap{font-size:14px;}
+    .hdr h1{font-size:22px;}
+    #cbcNext{position:sticky;bottom:8px;z-index:5;box-shadow:0 4px 18px rgba(0,0,0,.5);}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 0. 封面/同意書 -->
+  <section id="s-intro" class="screen active">
+    <div class="hdr">
+      <span class="kbadge">2026 FAN MEMBERSHIP STUDY</span>
+      <h1>中職球團付費會員方案</h1>
+      <div class="en">PRO BASEBALL MEMBERSHIP PREFERENCE</div>
+    </div>
+    <div class="panel">
+      <h2>研究說明</h2>
+      <p class="lead">
+        想像您<b>最支持或最常關注</b>的中職球隊，推出一項「<b>單季付費會員方案</b>」。<br><br>
+        接下來會出現 <b>8 組</b>，每組有 <b>兩個會員方案</b>，請依您的<b>實際想法</b>，選出比較可能加入的一個。<br><br>
+        方案內容包含：會員費、消費折扣、優先購票、會員贈品、主場與社群權益、獨家媒體內容。
+      </p>
+      <p class="note">本問卷為學術研究用途，所有回答匿名、僅供統計分析，約需 5–7 分鐘。<b>點擊「開始作答」即代表您同意參與本研究。</b></p>
+    </div>
+    <button class="btn" onclick="go('s-screen')">開始作答 ▸</button>
+    <div class="sign">政大新聞　李怡志</div>
+  </section>
+
+  <!-- 1. S1/S2 篩選 -->
+  <section id="s-screen" class="screen">
+    <div class="hdr"><h1 style="font-size:21px">資格確認</h1></div>
+    <div class="panel">
+      <h2>S1・您是否常觀看、關注或接觸中華職棒相關內容？</h2>
+      <div class="radio-row" id="s1row">
+        <div class="chip" data-v="yes" onclick="pickS1(this,'yes')">是</div>
+        <div class="chip" data-v="no" onclick="pickS1(this,'no')">否</div>
+      </div>
+    </div>
+    <div class="panel" id="s2panel" style="display:none">
+      <h2>S2・請選擇您最支持或最常關注的一支中職球隊</h2>
+      <div class="radio-row" id="s2row"></div>
+      <p class="note">後續題目，請都以您選擇的這支球隊作為想像對象。</p>
+    </div>
+    <div class="err" id="screenErr"></div>
+    <button class="btn" id="screenNext" disabled onclick="startCBC()">進入會員方案選擇 ▸</button>
+  </section>
+
+  <!-- 2. CBC -->
+  <section id="s-cbc" class="screen">
+    <div class="prog">
+      <div class="bar"><i id="progBar"></i></div>
+      <span class="lab" id="progLab">第 1 / 8 組</span>
+    </div>
+    <div class="q-title">假設這是 <b id="teamName">您支持的球隊</b> 推出的兩個單季會員方案：</div>
+    <div class="trap-hint" id="trapHint"></div>
+    <div class="q-sub" id="qSub">請點選您<b>比較可能加入</b>的方案</div>
+    <div class="cards" id="cardWrap"></div>
+    <div class="err" id="cbcErr"></div>
+    <button class="btn" id="cbcNext" disabled onclick="nextRound()">下一組 ▸</button>
+  </section>
+
+  <!-- 3. 量表 -->
+  <section id="s-scale" class="screen">
+    <div class="hdr"><h1 style="font-size:21px">最後幾個問題</h1></div>
+    <p class="lead">請依您對 <b id="teamName2">這支球隊</b> 的真實感受作答（1＝非常不同意，7＝非常同意）。</p>
+    <div id="scaleWrap"></div>
+    <div class="err" id="scaleErr"></div>
+    <button class="btn" id="submitBtn" onclick="submitAll()">送出問卷 ✓</button>
+  </section>
+
+  <!-- 4. 完成 -->
+  <section id="s-done" class="screen">
+    <div class="hdr"><span class="kbadge">THANK YOU</span><h1>感謝您的填寫！</h1></div>
+    <div class="panel"><p class="lead" id="doneMsg">您的回答已成功送出，研究團隊由衷感謝。</p></div>
+    <div class="sign">政大新聞　李怡志</div>
+  </section>
+
+  <!-- 不符資格 -->
+  <section id="s-out" class="screen">
+    <div class="hdr"><h1 style="font-size:21px">感謝您的參與</h1></div>
+    <div class="panel"><p class="lead">本研究對象限定為有觀看中華職棒的球迷，感謝您撥冗。</p></div>
+  </section>
+
+</div>
+
+<script src="config.js"></script>
+<script src="survey.js"></script>
+</body>
+</html>
