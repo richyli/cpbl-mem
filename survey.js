@@ -110,7 +110,11 @@ function pickS1(el,v){
 function buildS2(){
   const row=document.getElementById('s2row'); row.innerHTML='';
   CONFIG.teams.forEach(t=>{
-    const d=document.createElement('div'); d.className='chip'; d.textContent=t.zh;
+    const d=document.createElement('div'); d.className='chip team-chip';
+    // 隊色圓徽（官方 logo 字母 B/U/R/G/W/T）+ 隊名
+    const mark=t.logo || t.zh.slice(-1);
+    const fg=isLight(t.ui)?'#1a1306':'#fff';
+    d.innerHTML=`<span class="team-logo" style="background:${t.ui};color:${fg}">${mark}</span><span class="team-name">${t.zh}</span>`;
     d.onclick=()=>{document.querySelectorAll('#s2row .chip').forEach(c=>c.classList.remove('sel'));
       d.classList.add('sel'); state.team=t.zh; state.teamObj=t; checkScreen();};
     row.appendChild(d);

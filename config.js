@@ -81,13 +81,14 @@ const CONFIG = {
 
   // ---- S2：六支中職球隊 ----
   // color = 官方 logo 色（卡面漸層用）；ui = 深底提亮版（○符號/標題/選中態用，確保對比≥3）
+  // logo = 官方識別字母（圓徽用）：B/U/R/G/W/T
   teams: [
-    { zh:"中信兄弟",          en:"CTBC BROTHERS",    color:"#f0c419", ui:"#f0c419" }, // 兄弟金黃
-    { zh:"統一 7-ELEVEn 獅",  en:"UNI-LIONS",        color:"#e95513", ui:"#e95513" }, // 獅朱橘
-    { zh:"樂天桃猿",          en:"RAKUTEN MONKEYS",  color:"#9e1b32", ui:"#d63d57" }, // 樂天暗紅
-    { zh:"富邦悍將",          en:"FUBON GUARDIANS",  color:"#13205e", ui:"#3f6fd8" }, // 富邦深藍
-    { zh:"味全龍",            en:"WEI CHUAN DRAGONS",color:"#c8102e", ui:"#e23a52" }, // 味全紅
-    { zh:"台鋼雄鷹",          en:"TSG HAWKS",        color:"#1a5632", ui:"#2f9e63" }, // 台鋼墨綠
+    { zh:"中信兄弟",          en:"CTBC BROTHERS",    logo:"B", color:"#f0c419", ui:"#f0c419" }, // 兄弟金黃
+    { zh:"統一 7-ELEVEn 獅",  en:"UNI-LIONS",        logo:"U", color:"#e95513", ui:"#e95513" }, // 獅朱橘
+    { zh:"樂天桃猿",          en:"RAKUTEN MONKEYS",  logo:"R", color:"#9e1b32", ui:"#d63d57" }, // 樂天暗紅
+    { zh:"富邦悍將",          en:"FUBON GUARDIANS",  logo:"G", color:"#13205e", ui:"#3f6fd8" }, // 富邦深藍
+    { zh:"味全龍",            en:"WEI CHUAN DRAGONS",logo:"W", color:"#c8102e", ui:"#e23a52" }, // 味全紅
+    { zh:"台鋼雄鷹",          en:"TSG HAWKS",        logo:"T", color:"#1a5632", ui:"#2f9e63" }, // 台鋼墨綠
   ],
 
   // ---- 量表（LCA 外部效標：球隊認同 / 球迷社群認同 / 知覺價值）----
