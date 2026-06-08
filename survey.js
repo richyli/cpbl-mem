@@ -136,7 +136,35 @@ function startCBC(){
   // CBC 頂部大型英文隊名
   const tt=document.getElementById('teamTitleEn');
   if(tt) tt.textContent=state.teamObj ? state.teamObj.en : '';
-  go('s-cbc'); renderItem();
+  buildExplain();          // 建屬性說明頁
+  go('s-explain');         // 先進說明頁，再由按鈕進 CBC
+}
+
+// 由說明頁進入 CBC：render 第一題並重啟計時（不把說明頁停留算進 rtMs）
+function enterCBC(){
+  go('s-cbc');
+  renderItem();            // renderItem 內會重啟 qStartTs 與秒數鎖
+}
+
+// 屬性說明頁：逐屬性列出意義 + 水準白話解釋（特別解釋順位）
+function buildExplain(){
+  const wrap=document.getElementById('explainWrap'); wrap.innerHTML='';
+  const notes={
+    price:"加入會員一整年（一個賽季）需付的費用。",
+    media:"球團提供的會員專屬影音內容，類型不同（一般戰報、深度專訪、休息室幕後、二軍養成紀錄）。",
+    ticket:"球票開賣時，會員可比一般人「更早搶票」。順位越前面＝越早能買、越搶得到好位子（第二順位＞第三順位＞第四順位，每場都能買 4 張）。",
+    interact:"會員專屬的互動機會。見面會採「抽選」制（報名後抽中才能參加），分球員見面會與啦啦隊見面會。",
+    freetix:"加入會員直接贈送的免費球票張數（可自用或送人）。",
+    gift:"加入會員贈送的實體紀念品。",
+  };
+  A.forEach(a=>{
+    const item=document.createElement('div'); item.className='explain-item';
+    const lv=a.levels.map(l=>l.label).join('、');
+    item.innerHTML=`<div class="ex-head"><span class="ex-ic">${a.icon}</span><b>${a.name}</b></div>
+      <div class="ex-note">${notes[a.key]||''}</div>
+      <div class="ex-lv">水準：${lv}</div>`;
+    wrap.appendChild(item);
+  });
 }
 
 // 依球隊主視覺色覆寫 CSS 變數（標題、選中態、卡面邊隨隊變色）
