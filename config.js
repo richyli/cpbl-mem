@@ -53,11 +53,12 @@ const CONFIG = {
     },
     {
       key: "interact", name: "互動活動", icon: "🎤", cls: "E 社群",
+      // 高水準用「中籤率」量化稀缺性，測球迷對見面會抽中機率的敏感度
       levels: [
-        { tag: "none", label: "無互動活動" },
-        { tag: "qa",   label: "線上球迷問答" },
-        { tag: "vote", label: "會員限定投票" },
-        { tag: "meet", label: "球員見面會報名資格" },
+        { tag: "none",   label: "無互動活動" },
+        { tag: "qa",     label: "線上球迷問答" },
+        { tag: "meet5",  label: "球員見面會抽選資格（5% 中籤率）" },
+        { tag: "meet10", label: "球員見面會抽選資格（10% 中籤率）" },
       ],
     },
     {
