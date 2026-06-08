@@ -61,11 +61,13 @@ const CONFIG = {
       ],
     },
     {
-      key: "lane", name: "專屬通道", icon: "🚪", cls: "D 主場",
-      // 2 水準（index0=低=無、index1=高=有，與其他屬性低→高一致）
+      key: "freetix", name: "免費票券", icon: "🎫", cls: "A 金錢/功能",
+      // 張數階梯（4 水準，純遞增，對齊樂天市場最高 6 張）
       levels: [
-        { tag: "no",  label: "無專屬通道" },
-        { tag: "yes", label: "有專屬通道" },
+        { tag: "0", label: "無免費票券" },
+        { tag: "2", label: "免費票券 2 張" },
+        { tag: "4", label: "免費票券 4 張" },
+        { tag: "6", label: "免費票券 6 張" },
       ],
     },
     {
