@@ -25,12 +25,12 @@ const CONFIG = {
   attributes: [
     {
       key: "price", name: "年度會員費", icon: "💳", cls: "A 金錢",
-      // 水準依 WTP 市場校準（見 analysis_output/wtp_market_benchmark.md）
+      // 上限拉到 4,200 涵蓋滿配內容 WTP（含免費票券折現），避免高端被截斷（見 brothers_fan_wtp_estimate）
       levels: [
-        { tag: "699",  label: "699 元" },
-        { tag: "1199", label: "1,199 元" },
-        { tag: "1999", label: "1,999 元" },
-        { tag: "2999", label: "2,999 元" },
+        { tag: "700",  label: "700 元" },
+        { tag: "1500", label: "1,500 元" },
+        { tag: "2700", label: "2,700 元" },
+        { tag: "4200", label: "4,200 元" },
       ],
     },
     {
@@ -62,12 +62,11 @@ const CONFIG = {
     },
     {
       key: "freetix", name: "免費票券", icon: "🎫", cls: "A 金錢/功能",
-      // 張數階梯（4 水準，純遞增，對齊樂天市場最高 6 張）
+      // 張數階梯（3 水準，降上限壓低滿配內容值使價格接得住）
       levels: [
         { tag: "0", label: "無免費票券" },
         { tag: "2", label: "免費票券 2 張" },
         { tag: "4", label: "免費票券 4 張" },
-        { tag: "6", label: "免費票券 6 張" },
       ],
     },
     {
