@@ -132,7 +132,7 @@ const CONFIG = {
   },
 
   // marker 題（CMV 共同方法變異校正，理論上與會員偏好無關）
-  marker: "我很喜歡藍色。",
+  marker: "我很喜歡白色。",
 
   scalePoints: 7, // 7 點 Likert
 

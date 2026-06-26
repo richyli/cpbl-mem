@@ -168,28 +168,21 @@
     <div class="panel">
       <h2>研究說明</h2>
       <p class="lead">
-        想像您<b>最支持或最常關注</b>的中職球隊，推出一項「<b>年度付費會員方案</b>」（一個賽季、為期一年）。<br><br>
-        接下來會出現 <b>8 組</b>，每組有 <b>兩個會員方案</b>，請依您的<b>實際想法</b>，選出比較可能加入的一個。<br><br>
+        想像您<b>最支持或最常關注</b>的中職球隊，新推出一項「<b>年度付費會員方案</b>」（一個賽季、為期一年）。<br><br>
+        接下來會出現 <b>10 組</b>，每組有 <b>兩個會員方案</b>，請從中選出您比較可能加入的一個。<br><br>
         方案內容包含：會員費、消費折扣、優先購票、會員贈品、主場與社群權益、獨家媒體內容。
       </p>
-      <p class="note">本問卷為學術研究用途，所有回答匿名、僅供統計分析，約需 5–7 分鐘。<b>點擊「開始作答」即代表您同意參與本研究。</b></p>
+      <p class="note">本問卷為學術研究用途，與 CPBL 無關，也無任何委託或贊助。所有回答均保持匿名、僅供統計分析，約需 5 分鐘。<b>點擊「開始作答」即代表您同意參與本研究。</b></p>
     </div>
     <button class="btn" onclick="go('s-screen')">開始作答 ▸</button>
     <div class="sign">國體大產經系　江亦瑄　×　政大新聞系　李怡志</div>
   </section>
 
-  <!-- 1. S1/S2 篩選 -->
+  <!-- 1. 球隊選擇 -->
   <section id="s-screen" class="screen">
-    <div class="hdr"><h1 style="font-size:21px">資格確認</h1></div>
-    <div class="panel">
-      <h2>S1・您是否常觀看、關注或接觸中華職棒相關內容？</h2>
-      <div class="radio-row" id="s1row">
-        <div class="chip" data-v="yes" onclick="pickS1(this,'yes')">是</div>
-        <div class="chip" data-v="no" onclick="pickS1(this,'no')">否</div>
-      </div>
-    </div>
-    <div class="panel" id="s2panel" style="display:none">
-      <h2>S2・請選擇您最支持或最常關注的一支中職球隊</h2>
+    <div class="hdr"><h1 style="font-size:21px">選擇球隊</h1></div>
+    <div class="panel" id="s2panel">
+      <h2>請選擇您最支持或最常關注的一支中職球隊</h2>
       <div class="radio-row" id="s2row"></div>
       <p class="note">後續題目，請都以您選擇的這支球隊作為想像對象。</p>
     </div>
@@ -211,7 +204,7 @@
     <div class="cbc-banner"><span id="teamTitleEn">TEAM</span></div>
     <div class="prog">
       <div class="bar"><i id="progBar"></i></div>
-      <span class="lab" id="progLab">第 1 / 8 組</span>
+      <span class="lab" id="progLab">第 1 / 10 題</span>
     </div>
     <div class="q-title">如果 <b id="teamName">您支持的球隊</b> 有這兩種會員方案，請點選您<b>最可能加入</b>的方案？</div>
     <div class="q-sub" id="qSub" style="display:none"></div>

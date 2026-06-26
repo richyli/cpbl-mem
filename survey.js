@@ -100,13 +100,7 @@ function buildSeq(){
   state.seq=seq;
 }
 
-/* ---------- S1 / S2 ---------- */
-function pickS1(el,v){
-  document.querySelectorAll('#s1row .chip').forEach(c=>c.classList.remove('sel'));
-  el.classList.add('sel'); state.s1=v;
-  document.getElementById('s2panel').style.display=(v==='yes')?'block':'none';
-  checkScreen();
-}
+/* ---------- 球隊選擇 ---------- */
 function buildS2(){
   const row=document.getElementById('s2row'); row.innerHTML='';
   CONFIG.teams.forEach(t=>{
@@ -121,11 +115,9 @@ function buildS2(){
   });
 }
 function checkScreen(){
-  const ok=(state.s1==='no')||(state.s1==='yes'&&state.team);
-  document.getElementById('screenNext').disabled=!ok;
+  document.getElementById('screenNext').disabled=!state.team;
 }
 function startCBC(){
-  if(state.s1==='no'){ go('s-out'); return; }
   if(!state.team){ document.getElementById('screenErr').textContent='請選擇一支球隊'; return; }
   applyTeamTheme();                     // 依選的隊套主視覺色調
   state.attrOrder=shuffle(A.map((_,i)=>i));
@@ -162,7 +154,7 @@ function buildExplain(){
     const lv=a.levels.map(l=>l.label).join('、');
     item.innerHTML=`<div class="ex-head"><span class="ex-ic">${a.icon}</span><b>${a.name}</b></div>
       <div class="ex-note">${notes[a.key]||''}</div>
-      <div class="ex-lv">水準：${lv}</div>`;
+      <div class="ex-lv">細分：${lv}</div>`;
     wrap.appendChild(item);
   });
 }
@@ -342,7 +334,7 @@ function flatten(){
   const out={
     submitted_at:new Date().toISOString(),
     duration_sec:Math.round((Date.now()-state.startTs)/1000),
-    s1:state.s1, team:state.team,
+    team:state.team,
     attrOrder:state.attrOrder.map(i=>A[i].key).join('|'),
     n_rounds:NROUND,
     leftRatio:(state.abCount? (state.leftCount/state.abCount):0).toFixed(3),
