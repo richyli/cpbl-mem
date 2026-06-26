@@ -25,12 +25,13 @@ const CONFIG = {
   attributes: [
     {
       key: "price", name: "年度會員費", icon: "💳", cls: "A 金錢",
-      // 上限拉到 4,200 涵蓋滿配內容 WTP（含免費票券折現），避免高端被截斷（見 brothers_fan_wtp_estimate）
+      // WTP 校準（見 wtp_market_benchmark §3）：最低 900≈最低配內容值、最高 2,900≈高配內容值，
+      // 兩端皆貼齊內容 WTP，避免低價卡「物超所值被秒選」、高價卡「定價遠超內容被秒棄」。跨距 ×3.2。
       levels: [
-        { tag: "700",  label: "700 元" },
+        { tag: "900",  label: "900 元" },
         { tag: "1500", label: "1,500 元" },
-        { tag: "2700", label: "2,700 元" },
-        { tag: "4200", label: "4,200 元" },
+        { tag: "2200", label: "2,200 元" },
+        { tag: "2900", label: "2,900 元" },
       ],
     },
     {

@@ -56,6 +56,11 @@ function pickProfile(noneIdx){
     return randLevel(i);
   });
 }
+// 把 level index 轉成「越大越好」的 betterness：
+// 價格 index 越大=越貴=越差，故反向；其餘屬性 index 越大=越好，維持原值。
+function better(i,v){ return i===priceIdx ? -v : v; }
+const PRICE_GAP_MAX = 2;   // 兩卡價格水準差距上限（≤2 個 level，避免 900 vs 2900 這種極端對決）
+
 function genPair(){
   const domAttrs = A.map((_,i)=>i).filter(i=>i!==mediaIdx);
   for(let t=0;t<60;t++){
@@ -64,9 +69,11 @@ function genPair(){
     const noneA=shuffled[0], noneB=shuffled[1];
     const pA=pickProfile(noneA), pB=pickProfile(noneB);
     if(pA.every((v,i)=>v===pB[i])) continue;            // 完全相同 → 重抽
-    const aGE=domAttrs.every(i=>pA[i]>=pB[i]);
-    const bGE=domAttrs.every(i=>pB[i]>=pA[i]);
-    if(aGE||bGE) continue;                              // 一卡支配 → 重抽（理論上已不會發生，保險）
+    if(Math.abs(pA[priceIdx]-pB[priceIdx])>PRICE_GAP_MAX) continue; // 價差>2 階 → 重抽
+    // 支配判定改用 betterness（價格已反向）：一卡每屬性皆不劣於對方 → 支配，重抽
+    const aDom=domAttrs.every(i=>better(i,pA[i])>=better(i,pB[i]));
+    const bDom=domAttrs.every(i=>better(i,pB[i])>=better(i,pA[i]));
+    if(aDom||bDom) continue;
     return {A:pA,B:pB};
   }
   // 保底
